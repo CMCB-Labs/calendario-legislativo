@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendário de Sessões e Reuniões – 2026</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 15px;
+      background: #f8f9fa;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #004080;
+      margin: 10px 0;
+    }
+
+    h1 { font-size: 1.8rem; margin-bottom: 5px; }
+    h2 { font-size: 1.3rem; margin-top: 0; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;          /* mobile-first: coluna */
+      gap: 20px;
+    }
+
+    .calendar-area {
+      flex: 1;
+    }
+
+    .events-area {
+      flex: 1;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .month-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px 8px;
+      margin: 15px 0;
+    }
+
+    .month-buttons button {
+      padding: 8px 12px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #f0f0f0;
+      transition: all 0.2s;
+    }
+
+    .month-buttons button:hover {
+      background: #e0e0e0;
+    }
+
+    .month-buttons button.active {
+      background: #004080;
+      color: white;
+      border-color: #004080;
+    }
+
+    #calendar {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background: #004080;
+      color: white;
+      font-weight: bold;
+      padding: 8px;
+    }
+
+    .day {
+      cursor: pointer;
+      min-height: 60px;               /* melhor para toque */
+      vertical-align: middle;
+      transition: background 0.15s;
+    }
+
+    .day:hover {
+      background: #f0f8ff;
+    }
+
+    .day.today {
+      outline: 3px solid #004080;
+      outline-offset: -3px;
+      position: relative;
+    }
+
+    .day.today::after {
+      content: "HOJE";
+      position: absolute;
+      bottom: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.6rem;
+      font-weight: bold;
+      color: #004080;
+    }
+
+    .sessao { background: #fffacd !important; font-weight: bold; }
+    .comissao { background: #e0ffff !important; font-weight: bold; }
+
+    .event-content {
+      font-size: 1rem;
+    }
+
+    .event-content strong {
+      color: #c00;
+    }
+
+    /* Tablet e desktop: lado a lado */
+    @media (min-width: 768px) {
+      .container {
+        flex-direction: row;
+        gap: 30px;
+      }
+
+      h1 { font-size: 2.2rem; }
+      h2 { font-size: 1.5rem; }
+
+      .month-buttons button {
+        font-size: 1rem;
+        padding: 10px 16px;
+      }
+
+      .day {
+        min-height: 80px;
+        font-size: 1.1rem;
+      }
+
+      th, td {
+        padding: 12px;
+      }
+    }
+
+    /* Muito pequeno (celulares antigos) */
+    @media (max-width: 480px) {
+      body { padding: 10px; }
+      .day { min-height: 50px; font-size: 0.9rem; }
+      th, td { padding: 8px; font-size: 0.85rem; }
+      .month-buttons { gap: 4px 6px; }
+      .month-buttons button { padding: 6px 10px; font-size: 0.85rem; }
+    }
+
+    /* Scroll horizontal se tabela muito larga (raro, mas seguro) */
+    .calendar-area {
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Calendário de Sessões e Reuniões – 2026</h1>
+<h2>Câmara Municipal de Coronel Barros</h2>
+
+<div class="container">
+
+  <div class="calendar-area">
+    <div class="month-buttons">
+      <button onclick="showMonth(0)">Janeiro</button>
+      <button onclick="showMonth(1)">Fevereiro</button>
+      <button onclick="showMonth(2)">Março</button>
+      <button onclick="showMonth(3)">Abril</button>
+      <button onclick="showMonth(4)">Maio</button>
+      <button onclick="showMonth(5)">Junho</button>
+      <button onclick="showMonth(6)">Julho</button>
+      <button onclick="showMonth(7)">Agosto</button>
+      <button onclick="showMonth(8)">Setembro</button>
+      <button onclick="showMonth(9)">Outubro</button>
+      <button onclick="showMonth(10)">Novembro</button>
+      <button onclick="showMonth(11)">Dezembro</button>
+    </div>
+
+    <div id="calendar"></div>
+  </div>
+
+  <div class="events-area">
+    <h3 style="margin-top:0; color:#c00; font-size:1.2rem;">Eventos do dia selecionado</h3>
+    <div id="events" class="event-content">
+      Clique em um dia no calendário para ver os eventos programados.
+    </div>
+  </div>
+
+</div>
+
+<script>
+const sessoes = [
+  "2026-03-02","2026-03-16","2026-03-30","2026-04-13","2026-04-27",
+  "2026-05-11","2026-05-25","2026-06-08","2026-06-22","2026-07-06",
+  "2026-07-20","2026-08-03","2026-08-17","2026-08-31","2026-09-14",
+  "2026-09-28","2026-10-12","2026-10-26","2026-11-09","2026-11-23",
+  "2026-12-07","2026-12-21"
+];
+
+const comissoes = [
+  "2026-01-05","2026-01-12","2026-03-09","2026-03-23","2026-04-06",
+  "2026-04-20","2026-05-04","2026-05-18","2026-06-01","2026-06-15",
+  "2026-06-29","2026-07-13","2026-07-27","2026-08-10","2026-08-24",
+  "2026-09-07","2026-09-21","2026-10-05","2026-10-19","2026-11-02",
+  "2026-11-16","2026-11-30","2026-12-14","2026-12-28"
+];
+
+const meses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+const diasMes = [31,28,31,30,31,30,31,31,30,31,30,31];
+
+// Função para verificar se é bissexto (para o ano de 2026 não precisa, mas é boa prática)
+function isLeapYear(year) {
+  return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+}
+
+function showMonth(mes) {
+  const cal = document.getElementById('calendar');
+  const now = new Date();
+  const currentYear = 2026; // O calendário é fixo em 2026 conforme o título
+  const todayDay = now.getDate();
+  const todayMonth = now.getMonth();
+  const todayYear = now.getFullYear();
+
+  // Ajuste para ano bissexto se necessário
+  if (isLeapYear(currentYear)) {
+    diasMes[1] = 29;
+  } else {
+    diasMes[1] = 28;
+  }
+
+  let html = `<h3 style="text-align:center; margin:15px 0; font-size:1.3rem;">${meses[mes]} ${currentYear}</h3>`;
+  html += '<table><tr>';
+  ['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'].forEach(d => html += `<th>${d}</th>`);
+  html += '</tr>';
+
+  const firstDay = new Date(currentYear, mes, 1).getDay();
+  let weekday = (firstDay === 0) ? 6 : firstDay - 1;
+  let day = 1;
+
+  while (day <= diasMes[mes]) {
+    if (weekday === 0) html += '<tr>';
+
+    if (day === 1 && weekday > 0) {
+      for (let i = 0; i < weekday; i++) html += '<td></td>';
+    }
+
+    const dateStr = `${currentYear}-${String(mes+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    let className = 'day';
+    let title = '';
+
+    // Verifica se é o dia atual
+    if (day === todayDay && mes === todayMonth && todayYear === currentYear) {
+      className += ' today';
+    }
+
+    if (sessoes.includes(dateStr)) {
+      className += ' sessao';
+      title = 'Sessão Ordinária – 18h';
+    } else if (comissoes.includes(dateStr)) {
+      className += ' comissao';
+      title = 'Reunião de Comissões – 17:35';
+    }
+
+    html += `<td class="${className}" onclick="showEvents('${dateStr}', ${day}, '${meses[mes]}')" title="${title}">${day}</td>`;
+
+    day++;
+    weekday = (weekday + 1) % 7;
+
+    if (weekday === 0 || day > diasMes[mes]) html += '</tr>';
+  }
+
+  html += '</table>';
+  cal.innerHTML = html;
+
+  // Atualiza botões
+  document.querySelectorAll('.month-buttons button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.month-buttons button')[mes].classList.add('active');
+}
+
+function showEvents(date, day, month) {
+  const events = document.getElementById('events');
+  let text = `<strong>${day} de ${month} de 2026</strong><br><br>`;
+
+  if (sessoes.includes(date)) {
+    text += '<strong>● Sessão Ordinária</strong><br>Horário: 18:00';
+  } else if (comissoes.includes(date)) {
+    text += '<strong>● Reunião de Comissões Ordinárias</strong><br>Horário: 17:35';
+  } else {
+    text += 'Nenhum evento agendado para este dia.';
+  }
+
+  events.innerHTML = text;
+}
+
+window.onload = () => {
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentDay = now.getDate();
+  const currentYear = now.getFullYear();
+  
+  // Inicia no mês atual
+  showMonth(currentMonth);
+  
+  // Seleciona automaticamente o dia atual nos eventos se estivermos em 2026
+  if (currentYear === 2026) {
+    const dateStr = `2026-${String(currentMonth+1).padStart(2,'0')}-${String(currentDay).padStart(2,'0')}`;
+    showEvents(dateStr, currentDay, meses[currentMonth]);
+  }
+};
+</script>
+
+</body>
+</html>
