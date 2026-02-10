@@ -132,6 +132,7 @@
 
     .sessao { background: #fffacd !important; font-weight: bold; }
     .comissao { background: #e0ffff !important; font-weight: bold; }
+    .recesso { background: #ffe4e1 !important; font-style: italic; }
 
     .event-content {
       font-size: 1rem;
@@ -217,6 +218,27 @@
 </div>
 
 <script>
+// Estrutura de eventos detalhada
+const eventosExtras = {
+  "2026-01-05": [
+    { tipo: "sessao", titulo: "Sessão Ordinária", horario: "18:00" }
+  ],
+  "2026-01-12": [
+    { tipo: "comissao", titulo: "Reunião da Comissão de Constituição, Justiça, Cidadania e Desenvolvimento Social", horario: "17:35" },
+    { tipo: "comissao", titulo: "Reunião da Comissão de Orçamento, Finanças, Tributos e Infraestrutura Urbana e Rural", horario: "17:35" }
+  ],
+  "2026-01-14": [
+    { tipo: "sessao", titulo: "Sessão Extraordinária", horario: "18:00" },
+    { tipo: "comissao", titulo: "Reunião Extraordinária da Comissão de Orçamento", horario: "Após a Sessão Extraordinária" }
+  ],
+  "2026-01-16": [
+    { tipo: "comissao", titulo: "Reunião Extraordinária da Comissão de Constituição", horario: "12:30" }
+  ],
+  "2026-01-19": [
+    { tipo: "sessao", titulo: "Sessão Extraordinária", horario: "18:00" }
+  ]
+};
+
 const sessoes = [
   "2026-03-02","2026-03-16","2026-03-30","2026-04-13","2026-04-27",
   "2026-05-11","2026-05-25","2026-06-08","2026-06-22","2026-07-06",
@@ -226,7 +248,7 @@ const sessoes = [
 ];
 
 const comissoes = [
-  "2026-01-05","2026-01-12","2026-03-09","2026-03-23","2026-04-06",
+  "2026-03-09","2026-03-23","2026-04-06",
   "2026-04-20","2026-05-04","2026-05-18","2026-06-01","2026-06-15",
   "2026-06-29","2026-07-13","2026-07-27","2026-08-10","2026-08-24",
   "2026-09-07","2026-09-21","2026-10-05","2026-10-19","2026-11-02",
@@ -236,7 +258,13 @@ const comissoes = [
 const meses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
 const diasMes = [31,28,31,30,31,30,31,31,30,31,30,31];
 
-// Função para verificar se é bissexto (para o ano de 2026 não precisa, mas é boa prática)
+function isRecesso(dateStr) {
+  const date = new Date(dateStr + "T00:00:00");
+  const start = new Date("2026-01-15T00:00:00");
+  const end = new Date("2026-02-28T00:00:00");
+  return date >= start && date <= end;
+}
+
 function isLeapYear(year) {
   return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
 }
@@ -244,12 +272,11 @@ function isLeapYear(year) {
 function showMonth(mes) {
   const cal = document.getElementById('calendar');
   const now = new Date();
-  const currentYear = 2026; // O calendário é fixo em 2026 conforme o título
+  const currentYear = 2026;
   const todayDay = now.getDate();
   const todayMonth = now.getMonth();
   const todayYear = now.getFullYear();
 
-  // Ajuste para ano bissexto se necessário
   if (isLeapYear(currentYear)) {
     diasMes[1] = 29;
   } else {
@@ -276,17 +303,25 @@ function showMonth(mes) {
     let className = 'day';
     let title = '';
 
-    // Verifica se é o dia atual
     if (day === todayDay && mes === todayMonth && todayYear === currentYear) {
       className += ' today';
     }
 
-    if (sessoes.includes(dateStr)) {
+    if (eventosExtras[dateStr]) {
+      const temSessao = eventosExtras[dateStr].some(e => e.tipo === 'sessao');
+      const temComissao = eventosExtras[dateStr].some(e => e.tipo === 'comissao');
+      if (temSessao) className += ' sessao';
+      else if (temComissao) className += ' comissao';
+      title = eventosExtras[dateStr].map(e => e.titulo).join(' / ');
+    } else if (sessoes.includes(dateStr)) {
       className += ' sessao';
       title = 'Sessão Ordinária – 18h';
     } else if (comissoes.includes(dateStr)) {
       className += ' comissao';
-      title = 'Reunião de Comissões – 17:35';
+      title = 'Reuniões de Comissões – 17:35';
+    } else if (isRecesso(dateStr)) {
+      className += ' recesso';
+      title = 'Recesso Parlamentar';
     }
 
     html += `<td class="${className}" onclick="showEvents('${dateStr}', ${day}, '${meses[mes]}')" title="${title}">${day}</td>`;
@@ -300,7 +335,6 @@ function showMonth(mes) {
   html += '</table>';
   cal.innerHTML = html;
 
-  // Atualiza botões
   document.querySelectorAll('.month-buttons button').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.month-buttons button')[mes].classList.add('active');
 }
@@ -309,10 +343,17 @@ function showEvents(date, day, month) {
   const events = document.getElementById('events');
   let text = `<strong>${day} de ${month} de 2026</strong><br><br>`;
 
-  if (sessoes.includes(date)) {
+  if (eventosExtras[date]) {
+    eventosExtras[date].forEach(e => {
+      text += `<strong>● ${e.titulo}</strong><br>Horário: ${e.horario}<br><br>`;
+    });
+  } else if (sessoes.includes(date)) {
     text += '<strong>● Sessão Ordinária</strong><br>Horário: 18:00';
   } else if (comissoes.includes(date)) {
-    text += '<strong>● Reunião de Comissões Ordinárias</strong><br>Horário: 17:35';
+    text += '<strong>● Reunião da Comissão de Constituição, Justiça, Cidadania e Desenvolvimento Social</strong><br>Horário: 17:35<br><br>';
+    text += '<strong>● Reunião da Comissão de Orçamento, Finanças, Tributos e Infraestrutura Urbana e Rural</strong><br>Horário: 17:35';
+  } else if (isRecesso(date)) {
+    text += '<strong>● Recesso Parlamentar</strong>';
   } else {
     text += 'Nenhum evento agendado para este dia.';
   }
@@ -326,10 +367,8 @@ window.onload = () => {
   const currentDay = now.getDate();
   const currentYear = now.getFullYear();
   
-  // Inicia no mês atual
   showMonth(currentMonth);
   
-  // Seleciona automaticamente o dia atual nos eventos se estivermos em 2026
   if (currentYear === 2026) {
     const dateStr = `2026-${String(currentMonth+1).padStart(2,'0')}-${String(currentDay).padStart(2,'0')}`;
     showEvents(dateStr, currentDay, meses[currentMonth]);
