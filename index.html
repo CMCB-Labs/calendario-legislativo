@@ -130,8 +130,22 @@
       color: #004080;
     }
 
+    .day.selected {
+      background: #ffebcc !important;
+      border: 2px solid #ff8c00;
+      box-shadow: inset 0 0 0 1px rgba(255,140,0,0.25);
+      position: relative;
+      z-index: 1;
+    }
+
+    .day.selected:hover {
+      background: #ffe3b8 !important;
+    }
+
     .sessao { background: #fffacd !important; font-weight: bold; }
     .comissao { background: #e0ffff !important; font-weight: bold; }
+    .feriado { background: #ffd1dc !important; font-weight: bold; }
+    .ponto-facultativo { background: #f0f0f0 !important; font-style: italic; }
     .recesso { background: #ffe4e1 !important; font-style: italic; }
 
     .event-content {
@@ -240,6 +254,12 @@ const eventosExtras = {
   "2026-03-20": [
     { tipo: "aniversario", titulo: "Aniversário do Município", horario: "Dia todo" },
     { tipo: "sessao", titulo: "Sessão Solene", horario: "17:30" }
+  ],
+  "2026-04-20": [
+    { tipo: "ponto-facultativo", titulo: "Ponto Facultativo", horario: "Dia todo" }
+  ],
+  "2026-04-21": [
+    { tipo: "feriado", titulo: "Feriado de Tiradentes", horario: "Dia todo" }
   ]
 };
 
@@ -253,7 +273,7 @@ const sessoes = [
 
 const comissoes = [
   "2026-03-09","2026-03-23","2026-04-06",
-  "2026-04-20","2026-05-04","2026-05-18","2026-06-01","2026-06-15",
+  "2026-04-22","2026-05-04","2026-05-18","2026-06-01","2026-06-15",
   "2026-06-29","2026-07-13","2026-07-27","2026-08-10","2026-08-24",
   "2026-09-07","2026-09-21","2026-10-05","2026-10-19","2026-11-02",
   "2026-11-16","2026-11-30","2026-12-14","2026-12-28"
@@ -314,8 +334,12 @@ function showMonth(mes) {
     if (eventosExtras[dateStr]) {
       const temSessao = eventosExtras[dateStr].some(e => e.tipo === 'sessao');
       const temComissao = eventosExtras[dateStr].some(e => e.tipo === 'comissao');
+      const temFeriado = eventosExtras[dateStr].some(e => e.tipo === 'feriado');
+      const temPonto = eventosExtras[dateStr].some(e => e.tipo === 'ponto-facultativo');
       if (temSessao) className += ' sessao';
       else if (temComissao) className += ' comissao';
+      else if (temFeriado) className += ' feriado';
+      else if (temPonto) className += ' ponto-facultativo';
       title = eventosExtras[dateStr].map(e => e.titulo).join(' / ');
     } else if (sessoes.includes(dateStr)) {
       className += ' sessao';
@@ -328,7 +352,7 @@ function showMonth(mes) {
       title = 'Recesso Parlamentar';
     }
 
-    html += `<td class="${className}" onclick="showEvents('${dateStr}', ${day}, '${meses[mes]}')" title="${title}">${day}</td>`;
+    html += `<td class="${className}" data-date="${dateStr}" onclick="showEvents('${dateStr}', ${day}, '${meses[mes]}')" title="${title}">${day}</td>`;
 
     day++;
     weekday = (weekday + 1) % 7;
@@ -363,6 +387,8 @@ function showEvents(date, day, month) {
   }
 
   events.innerHTML = text;
+  document.querySelectorAll('.day.selected').forEach(d => d.classList.remove('selected'));
+  document.querySelectorAll(`.day[data-date="${date}"]`).forEach(cell => cell.classList.add('selected'));
 }
 
 window.onload = () => {
