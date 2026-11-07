@@ -2,409 +2,1193 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calendário de Sessões e Reuniões – 2026</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Calendário de Sessões e Reuniões - Câmara Municipal de Coronel Barros</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
+    :root {
+      --primary: #5c854b;
+      --primary-dark: #325a1e;
+      --primary-light: #729e60;
+      --accent: #3ebb51;
+      --accent-hover: #319e42;
+      --accent-soft: #eef6ec;
+      --text-main: #21301d;
+      --text-muted: #576b51;
+      --text-light: #8da187;
+      --bg: #f5f7f4;
+      --surface: #ffffff;
+      --border: #dbe4d8;
+      --border-focus: #5c854b;
+      
+      /* Cores de Eventos */
+      --sessao-bg: #fff8e1;
+      --sessao-border: #fbc02d;
+      --sessao-text: #7f6000;
+      --sessao-dot: #f57f17;
+
+      --comissao-bg: #e0f2f1;
+      --comissao-border: #4db6ac;
+      --comissao-text: #004d40;
+      --comissao-dot: #00897b;
+
+      --feriado-bg: #ffebee;
+      --feriado-border: #e57373;
+      --feriado-text: #b71c1c;
+      --feriado-dot: #d32f2f;
+
+      --ponto-bg: #f3e5f5;
+      --ponto-border: #ba68c8;
+      --ponto-text: #4a148c;
+      --ponto-dot: #8e24aa;
+
+      --recesso-bg: #f5f5f5;
+      --recesso-border: #cfd8dc;
+      --recesso-text: #546e7a;
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 10px rgba(40, 70, 30, 0.08);
+      --shadow-lg: 0 10px 25px rgba(40, 70, 30, 0.12);
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      overflow-x: hidden;
     }
 
     body {
-      font-family: Arial, Helvetica, sans-serif;
-      margin: 0;
-      padding: 15px;
-      background: #f8f9fa;
-      color: #333;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
       line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      padding: 0;
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: #a4c49b transparent;
     }
 
-    h1, h2 {
-      text-align: center;
-      color: #004080;
-      margin: 10px 0;
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #a4c49b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary);
     }
 
-    h1 { font-size: 1.8rem; margin-bottom: 5px; }
-    h2 { font-size: 1.3rem; margin-top: 0; }
+    /* Embed Mode Overrides (Plone) */
+    body.is-embedded {
+      background: transparent !important;
+      min-height: auto !important;
+      height: auto !important;
+      overflow-y: hidden;
+    }
+    body.is-embedded .app-container {
+      max-width: 100%;
+      padding: 6px 4px 16px;
+    }
+    body.hide-header .main-header {
+      display: none !important;
+    }
 
-    .container {
+    /* Container Principal */
+    .app-container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 14px 32px;
+    }
+
+    /* Header Principal */
+    .main-header {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 65%, var(--primary-light) 100%);
+      color: #ffffff;
+      padding: 1.75rem 1.5rem 1.5rem;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      border-bottom: 3px solid var(--accent);
+    }
+    .header-content {
       max-width: 1200px;
       margin: 0 auto;
       display: flex;
-      flex-direction: column;          /* mobile-first: coluna */
-      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
     }
-
-    .calendar-area {
-      flex: 1;
+    .header-info h1 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
     }
-
-    .events-area {
-      flex: 1;
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 15px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    .header-info p {
+      font-size: 0.92rem;
+      opacity: 0.92;
+      color: #eef6ec;
     }
-
-    .month-buttons {
+    .header-badges {
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
-      gap: 6px 8px;
-      margin: 15px 0;
+      gap: 0.5rem;
+    }
+    .header-pill {
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.35rem 0.85rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #ffffff;
+      backdrop-filter: blur(6px);
     }
 
-    .month-buttons button {
-      padding: 8px 12px;
-      font-size: 0.95rem;
+    /* Navegação de Meses */
+    .month-nav-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.75rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .month-buttons {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 0.35rem;
+    }
+    .month-btn {
+      padding: 0.55rem 0.25rem;
+      font-size: 0.85rem;
+      font-weight: 600;
       cursor: pointer;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      background: #f0f0f0;
-      transition: all 0.2s;
-    }
-
-    .month-buttons button:hover {
-      background: #e0e0e0;
-    }
-
-    .month-buttons button.active {
-      background: #004080;
-      color: white;
-      border-color: #004080;
-    }
-
-    #calendar {
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.95rem;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: #f7faf6;
+      color: var(--text-main);
+      transition: var(--transition);
       text-align: center;
     }
-
-    th {
-      background: #004080;
-      color: white;
-      font-weight: bold;
-      padding: 8px;
+    .month-btn:hover {
+      background: var(--accent-soft);
+      border-color: var(--primary-light);
+      color: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+    .month-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary-dark);
+      box-shadow: 0 2px 6px rgba(92, 133, 75, 0.35);
+      font-weight: 700;
     }
 
-    .day {
+    /* Layout Calendário + Detalhes */
+    .calendar-layout {
+      display: grid;
+      grid-template-columns: 1.65fr 1fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    /* Cartão do Calendário */
+    .calendar-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .month-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .month-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .month-arrows {
+      display: flex;
+      gap: 0.4rem;
+    }
+    .btn-nav-arrow {
+      background: #f0f4ee;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
       cursor: pointer;
-      min-height: 60px;               /* melhor para toque */
-      vertical-align: middle;
-      transition: background 0.15s;
-    }
-
-    .day:hover {
-      background: #f0f8ff;
-    }
-
-    .day.today {
-      outline: 3px solid #004080;
-      outline-offset: -3px;
-      position: relative;
-    }
-
-    .day.today::after {
-      content: "HOJE";
-      position: absolute;
-      bottom: 2px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.6rem;
-      font-weight: bold;
-      color: #004080;
-    }
-
-    .day.selected {
-      background: #ffebcc !important;
-      border: 2px solid #ff8c00;
-      box-shadow: inset 0 0 0 1px rgba(255,140,0,0.25);
-      position: relative;
-      z-index: 1;
-    }
-
-    .day.selected:hover {
-      background: #ffe3b8 !important;
-    }
-
-    .sessao { background: #fffacd !important; font-weight: bold; }
-    .comissao { background: #e0ffff !important; font-weight: bold; }
-    .feriado { background: #ffd1dc !important; font-weight: bold; }
-    .ponto-facultativo { background: #f0f0f0 !important; font-style: italic; }
-    .recesso { background: #ffe4e1 !important; font-style: italic; }
-
-    .event-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 1rem;
+      font-weight: bold;
+      transition: var(--transition);
+    }
+    .btn-nav-arrow:hover {
+      background: var(--accent-soft);
+      border-color: var(--primary);
+      color: var(--primary-dark);
     }
 
-    .event-content strong {
-      color: #c00;
-    }
-
-    /* Tablet e desktop: lado a lado */
-    @media (min-width: 768px) {
-      .container {
-        flex-direction: row;
-        gap: 30px;
-      }
-
-      h1 { font-size: 2.2rem; }
-      h2 { font-size: 1.5rem; }
-
-      .month-buttons button {
-        font-size: 1rem;
-        padding: 10px 16px;
-      }
-
-      .day {
-        min-height: 80px;
-        font-size: 1.1rem;
-      }
-
-      th, td {
-        padding: 12px;
-      }
-    }
-
-    /* Muito pequeno (celulares antigos) */
-    @media (max-width: 480px) {
-      body { padding: 10px; }
-      .day { min-height: 50px; font-size: 0.9rem; }
-      th, td { padding: 8px; font-size: 0.85rem; }
-      .month-buttons { gap: 4px 6px; }
-      .month-buttons button { padding: 6px 10px; font-size: 0.85rem; }
-    }
-
-    /* Scroll horizontal se tabela muito larga (raro, mas seguro) */
-    .calendar-area {
+    /* Tabela do Calendário */
+    .calendar-table-wrap {
+      width: 100%;
       overflow-x: auto;
+    }
+    table.cal-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 4px;
+      table-layout: fixed;
+    }
+    table.cal-table th {
+      padding: 0.5rem 0.25rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+    table.cal-table td {
+      height: 70px;
+      border-radius: var(--radius-sm);
+      border: 1px solid #e5ede3;
+      vertical-align: top;
+      padding: 6px 5px;
+      cursor: pointer;
+      transition: var(--transition);
+      background: #ffffff;
+      position: relative;
+    }
+    table.cal-table td:hover {
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(92, 133, 75, 0.18);
+      transform: translateY(-2px);
+      z-index: 2;
+    }
+    table.cal-table td.empty-cell {
+      background: transparent;
+      border-color: transparent;
+      cursor: default;
+    }
+    table.cal-table td.empty-cell:hover {
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* Estilos dos Dias */
+    .day-num {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: block;
+      margin-bottom: 4px;
+      line-height: 1;
+    }
+    .day-badges {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .day-pill {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 1px 4px;
+      border-radius: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.25;
+      display: block;
+    }
+
+    /* Cores de Classes de Dias */
+    td.is-sessao {
+      background: var(--sessao-bg) !important;
+      border-color: var(--sessao-border) !important;
+    }
+    td.is-sessao .day-pill {
+      background: #fff0b3;
+      color: var(--sessao-text);
+      border: 1px solid rgba(251, 192, 45, 0.4);
+    }
+
+    td.is-comissao {
+      background: var(--comissao-bg) !important;
+      border-color: var(--comissao-border) !important;
+    }
+    td.is-comissao .day-pill {
+      background: #b2dfdb;
+      color: var(--comissao-text);
+      border: 1px solid rgba(77, 182, 172, 0.4);
+    }
+
+    td.is-feriado {
+      background: var(--feriado-bg) !important;
+      border-color: var(--feriado-border) !important;
+    }
+    td.is-feriado .day-pill {
+      background: #ffcdd2;
+      color: var(--feriado-text);
+      border: 1px solid rgba(229, 115, 115, 0.4);
+    }
+
+    td.is-ponto {
+      background: var(--ponto-bg) !important;
+      border-color: var(--ponto-border) !important;
+    }
+    td.is-ponto .day-pill {
+      background: #e1bee7;
+      color: var(--ponto-text);
+      border: 1px solid rgba(186, 104, 200, 0.4);
+    }
+
+    td.is-recesso {
+      background: var(--recesso-bg) !important;
+      border-color: var(--recesso-border) !important;
+      opacity: 0.85;
+    }
+    td.is-recesso .day-pill {
+      background: #eceff1;
+      color: var(--recesso-text);
+    }
+
+    /* Destaque para Hoje */
+    td.is-today {
+      outline: 2px solid var(--primary-dark) !important;
+      outline-offset: -2px;
+    }
+    td.is-today .day-num {
+      color: var(--primary-dark);
+      font-weight: 800;
+    }
+    .today-tag {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      background: var(--primary-dark);
+      color: #ffffff;
+      font-size: 0.55rem;
+      font-weight: 800;
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+
+    /* Destaque para Dia Selecionado */
+    td.is-selected {
+      box-shadow: 0 0 0 3px #ff9800, 0 4px 12px rgba(255, 152, 0, 0.3) !important;
+      border-color: #f57c00 !important;
+      z-index: 5;
+    }
+
+    /* Legenda de Cores */
+    .cal-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-top: 1rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--border);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    /* Cartão de Detalhes do Evento */
+    .details-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .details-card-header {
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .details-date-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .details-weekday {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+      font-weight: 500;
+    }
+
+    .events-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .event-entry {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.85rem 1rem;
+      background: #fafcfa;
+      border-left: 4px solid var(--primary);
+      transition: var(--transition);
+    }
+    .event-entry.event-sessao {
+      border-left-color: var(--sessao-dot);
+      background: #fffdf5;
+    }
+    .event-entry.event-comissao {
+      border-left-color: var(--comissao-dot);
+      background: #f4faf9;
+    }
+    .event-entry.event-feriado {
+      border-left-color: var(--feriado-dot);
+      background: #fff8f8;
+    }
+    .event-entry.event-ponto {
+      border-left-color: var(--ponto-dot);
+      background: #faf4fc;
+    }
+    .event-entry.event-recesso {
+      border-left-color: var(--recesso-border);
+      background: #f9faf9;
+    }
+
+    .event-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      line-height: 1.35;
+    }
+    .event-time {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 600;
+    }
+    .event-alert-box {
+      margin-top: 0.5rem;
+      background: #fff3e0;
+      border: 1px solid #ffe082;
+      border-radius: 6px;
+      padding: 0.45rem 0.65rem;
+      font-size: 0.8rem;
+      color: #b76e00;
+      line-height: 1.35;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.4rem;
+    }
+
+    .empty-events {
+      text-align: center;
+      padding: 2.25rem 1rem;
+      color: var(--text-muted);
+    }
+    .empty-events svg {
+      color: var(--text-light);
+      margin-bottom: 0.5rem;
+    }
+    .empty-events p {
+      font-size: 0.9rem;
+    }
+
+    /* Próximas Sessões do Mês */
+    .upcoming-box {
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .upcoming-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.65rem;
+    }
+    .upcoming-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.45rem 0.6rem;
+      border-radius: 6px;
+      background: #f5f8f4;
+      margin-bottom: 0.35rem;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .upcoming-item:hover {
+      background: var(--accent-soft);
+      transform: translateX(3px);
+    }
+    .upcoming-day {
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    /* Regras de Responsividade */
+    @media (max-width: 900px) {
+      .calendar-layout {
+        grid-template-columns: 1fr;
+      }
+      .month-buttons {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+    @media (max-width: 550px) {
+      .month-buttons {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      table.cal-table td {
+        height: 55px;
+        padding: 3px 2px;
+      }
+      .day-num {
+        font-size: 0.85rem;
+      }
+      .day-pill {
+        font-size: 0.58rem;
+        padding: 1px 2px;
+      }
+      .cal-legend {
+        gap: 0.5rem;
+      }
     }
   </style>
 </head>
 <body>
 
-<h1>Calendário de Sessões e Reuniões – 2026</h1>
-<h2>Câmara Municipal de Coronel Barros</h2>
+  <!-- Top Header (Hidden in embed mode when hide_header=1) -->
+  <header class="main-header">
+    <div class="header-content">
+      <div class="header-info">
+        <h1>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          Calendário Legislativo — 2026
+        </h1>
+        <p>Câmara Municipal de Vereadores de Coronel Barros / RS</p>
+      </div>
+      <div class="header-badges">
+        <span class="header-pill">🏛️ Sessões Plenárias às 18h</span>
+        <span class="header-pill">👥 Comissões às 17h35</span>
+      </div>
+    </div>
+  </header>
 
-<div class="container">
+  <div class="app-container">
 
-  <div class="calendar-area">
-    <div class="month-buttons">
-      <button onclick="showMonth(0)">Janeiro</button>
-      <button onclick="showMonth(1)">Fevereiro</button>
-      <button onclick="showMonth(2)">Março</button>
-      <button onclick="showMonth(3)">Abril</button>
-      <button onclick="showMonth(4)">Maio</button>
-      <button onclick="showMonth(5)">Junho</button>
-      <button onclick="showMonth(6)">Julho</button>
-      <button onclick="showMonth(7)">Agosto</button>
-      <button onclick="showMonth(8)">Setembro</button>
-      <button onclick="showMonth(9)">Outubro</button>
-      <button onclick="showMonth(10)">Novembro</button>
-      <button onclick="showMonth(11)">Dezembro</button>
+    <!-- Navegação Rápida por Mês -->
+    <nav class="month-nav-card" aria-label="Navegação por mês">
+      <div class="month-buttons" id="monthButtonsContainer"></div>
+    </nav>
+
+    <!-- Layout Calendário + Detalhes -->
+    <div class="calendar-layout">
+      
+      <!-- Coluna da Esquerda: Grade do Calendário -->
+      <section class="calendar-card">
+        <div class="month-header-bar">
+          <h2 class="month-title" id="monthDisplayTitle">Março 2026</h2>
+          <div class="month-arrows">
+            <button type="button" class="btn-nav-arrow" id="btnPrevMonth" title="Mês anterior">&lsaquo;</button>
+            <button type="button" class="btn-nav-arrow" id="btnNextMonth" title="Próximo mês">&rsaquo;</button>
+          </div>
+        </div>
+
+        <div class="calendar-table-wrap">
+          <table class="cal-table" id="calendarTable">
+            <thead>
+              <tr>
+                <th>Seg</th>
+                <th>Ter</th>
+                <th>Qua</th>
+                <th>Qui</th>
+                <th>Sex</th>
+                <th>Sáb</th>
+                <th>Dom</th>
+              </tr>
+            </thead>
+            <tbody id="calendarBody"></tbody>
+          </table>
+        </div>
+
+        <!-- Legenda -->
+        <div class="cal-legend">
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--sessao-border);"></span>
+            Sessão Plenária
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--comissao-border);"></span>
+            Comissões
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--feriado-border);"></span>
+            Feriado
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--ponto-border);"></span>
+            Ponto Facultativo
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--recesso-border);"></span>
+            Recesso
+          </div>
+        </div>
+      </section>
+
+      <!-- Coluna da Direita: Detalhes do Dia Selecionado -->
+      <aside class="details-card">
+        <div class="details-card-header">
+          <h3 class="details-date-title" id="detailsDateTitle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span id="selectedDateText">Selecione um dia</span>
+          </h3>
+          <div class="details-weekday" id="selectedWeekdayText">Clique no calendário para ver a pauta</div>
+        </div>
+
+        <div id="eventsList" class="events-list">
+          <div class="empty-events">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <p>Selecione um dia no calendário para consultar as sessões, reuniões e eventos oficiais.</p>
+          </div>
+        </div>
+
+        <!-- Próximos Eventos do Mês -->
+        <div class="upcoming-box">
+          <div class="upcoming-title">Sessões e Atividades deste Mês</div>
+          <div id="monthUpcomingList"></div>
+        </div>
+      </aside>
+
     </div>
 
-    <div id="calendar"></div>
   </div>
 
-  <div class="events-area">
-    <h3 style="margin-top:0; color:#c00; font-size:1.2rem;">Eventos do dia selecionado</h3>
-    <div id="events" class="event-content">
-      Clique em um dia no calendário para ver os eventos programados.
-    </div>
-  </div>
+  <script>
+    const currentYear = 2026;
+    let selectedMonth = 2; // Março (0-indexed) como padrão de início das sessões ordinárias
+    let selectedDate = null;
 
-</div>
+    const meses = [
+      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+    const mesesAbrev = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+    const diasSemanaNomes = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"];
 
-<script>
-// Estrutura de eventos detalhada
-const eventosExtras = {
-  "2026-01-05": [
-    { tipo: "sessao", titulo: "Sessão Ordinária", horario: "18:00" }
-  ],
-  "2026-01-12": [
-    { tipo: "comissao", titulo: "Reunião da Comissão de Constituição, Justiça, Cidadania e Desenvolvimento Social", horario: "17:35" },
-    { tipo: "comissao", titulo: "Reunião da Comissão de Orçamento, Finanças, Tributos e Infraestrutura Urbana e Rural", horario: "17:35" }
-  ],
-  "2026-01-14": [
-    { tipo: "sessao", titulo: "Sessão Extraordinária", horario: "18:00" },
-    { tipo: "comissao", titulo: "Reunião Extraordinária da Comissão de Orçamento", horario: "Após a Sessão Extraordinária" }
-  ],
-  "2026-01-16": [
-    { tipo: "comissao", titulo: "Reunião Extraordinária da Comissão de Constituição", horario: "12:30" }
-  ],
-  "2026-01-19": [
-    { tipo: "sessao", titulo: "Sessão Extraordinária", horario: "18:00" }
-  ],
-  "2026-03-20": [
-    { tipo: "aniversario", titulo: "Aniversário do Município", horario: "Dia todo" },
-    { tipo: "sessao", titulo: "Sessão Solene", horario: "17:30" }
-  ],
-  "2026-04-20": [
-    { tipo: "ponto-facultativo", titulo: "Ponto Facultativo", horario: "Dia todo" }
-  ],
-  "2026-04-21": [
-    { tipo: "feriado", titulo: "Feriado de Tiradentes", horario: "Dia todo" }
-  ]
-};
+    /* ==========================================================
+       DADOS OFICIAIS DO CALENDÁRIO LEGISLATIVO 2026 (CMCB)
+       Regra Legal:
+       Art. 10, § 3º da Lei Orgânica Municipal de Coronel Barros:
+       "Em caso de feriado ou ponto facultativo na segunda-feira, 
+       a Câmara deverá se reunir no primeiro dia útil subsequente (terça-feira)."
+       ========================================================== */
 
-const sessoes = [
-  "2026-03-02","2026-03-16","2026-03-30","2026-04-13","2026-04-27",
-  "2026-05-11","2026-05-25","2026-06-08","2026-06-22","2026-07-06",
-  "2026-07-20","2026-08-03","2026-08-17","2026-08-31","2026-09-14",
-  "2026-09-28","2026-10-12","2026-10-26","2026-11-09","2026-11-23",
-  "2026-12-07","2026-12-21"
-];
+    // Feriados Nacionais, Estaduais e Municipais
+    const feriados2026 = {
+      "2026-01-01": { titulo: "Confraternização Universal (Ano Novo)", tipo: "feriado" },
+      "2026-02-16": { titulo: "Carnaval", tipo: "ponto-facultativo" },
+      "2026-02-17": { titulo: "Carnaval", tipo: "ponto-facultativo" },
+      "2026-03-20": { titulo: "Aniversário do Município de Coronel Barros (Data Magna)", tipo: "feriado" },
+      "2026-04-03": { titulo: "Sexta-feira Santa (Paixão de Cristo)", tipo: "feriado" },
+      "2026-04-05": { titulo: "Páscoa", tipo: "feriado" },
+      "2026-04-20": { titulo: "Ponto Facultativo (Véspera de Tiradentes)", tipo: "ponto-facultativo" },
+      "2026-04-21": { titulo: "Tiradentes", tipo: "feriado" },
+      "2026-05-01": { titulo: "Dia do Trabalhador", tipo: "feriado" },
+      "2026-06-04": { titulo: "Corpus Christi", tipo: "ponto-facultativo" },
+      "2026-09-07": { titulo: "Independência do Brasil", tipo: "feriado" },
+      "2026-09-20": { titulo: "Revolução Farroupilha (Dia do Gaúcho)", tipo: "feriado" },
+      "2026-10-12": { titulo: "Nossa Senhora Aparecida (Padroeira do Brasil)", tipo: "feriado" },
+      "2026-10-28": { titulo: "Dia do Servidor Público", tipo: "ponto-facultativo" },
+      "2026-11-02": { titulo: "Finados", tipo: "feriado" },
+      "2026-11-15": { titulo: "Proclamação da República", tipo: "feriado" },
+      "2026-11-20": { titulo: "Dia Nacional de Zumbi e da Consciência Negra", tipo: "feriado" },
+      "2026-12-25": { titulo: "Natal", tipo: "feriado" }
+    };
 
-const comissoes = [
-  "2026-03-09","2026-03-23","2026-04-06",
-  "2026-04-22","2026-05-04","2026-05-18","2026-06-01","2026-06-15",
-  "2026-06-29","2026-07-13","2026-07-27","2026-08-10","2026-08-24",
-  "2026-09-07","2026-09-21","2026-10-05","2026-10-19","2026-11-02",
-  "2026-11-16","2026-11-30","2026-12-14","2026-12-28"
-];
+    // Sessões Ordinárias 2026 (Quinzenais às 18h)
+    // NOTA: 12/10 é feriado de N. Sra. Aparecida (Segunda) -> Transferida para Terça, 13/10!
+    const sessoes2026 = [
+      "2026-03-02", "2026-03-16", "2026-03-30", "2026-04-13", "2026-04-27",
+      "2026-05-11", "2026-05-25", "2026-06-08", "2026-06-22", "2026-07-06",
+      "2026-07-20", "2026-08-03", "2026-08-17", "2026-08-31", "2026-09-14",
+      "2026-09-28", 
+      "2026-10-13", // Transferida de 12/10 (feriado nacional) para terça-feira!
+      "2026-10-26", "2026-11-09", "2026-11-23", "2026-12-07", "2026-12-21"
+    ];
 
-const meses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
-const diasMes = [31,28,31,30,31,30,31,31,30,31,30,31];
+    // Reuniões de Comissões Permanentes 2026 (Quinzenais às 17h35)
+    // NOTA: 07/09 (Independência) e 02/11 (Finados) são feriados em segundas-feiras -> Transferidas para terças!
+    const comissoes2026 = [
+      "2026-03-09", "2026-03-23", "2026-04-06",
+      "2026-04-22", // Transferida pós ponto facultativo (20) e Tiradentes (21)
+      "2026-05-04", "2026-05-18", "2026-06-01", "2026-06-15",
+      "2026-06-29", "2026-07-13", "2026-07-27", "2026-08-10", "2026-08-24",
+      "2026-09-08", // Transferida de 07/09 (Independência do Brasil) para terça-feira!
+      "2026-09-21", "2026-10-05", "2026-10-19",
+      "2026-11-03", // Transferida de 02/11 (Finados) para terça-feira!
+      "2026-11-16", "2026-11-30", "2026-12-14", "2026-12-28"
+    ];
 
-function isRecesso(dateStr) {
-  const date = new Date(dateStr + "T00:00:00");
-  const start = new Date("2026-01-15T00:00:00");
-  const end = new Date("2026-02-28T00:00:00");
-  return date >= start && date <= end;
-}
+    // Eventos Especiais ou com horários específicos
+    const eventosExtras = {
+      "2026-01-05": [
+        { tipo: "sessao", titulo: "Sessão Ordinária", horario: "18:00" }
+      ],
+      "2026-01-12": [
+        { tipo: "comissao", titulo: "Reunião da Comissão de Constituição, Justiça, Cidadania e Desenvolvimento Social", horario: "17:35" },
+        { tipo: "comissao", titulo: "Reunião da Comissão de Orçamento, Finanças, Tributos e Infraestrutura Urbana e Rural", horario: "17:35" }
+      ],
+      "2026-01-14": [
+        { tipo: "sessao", titulo: "Sessão Extraordinária", horario: "18:00" },
+        { tipo: "comissao", titulo: "Reunião Extraordinária da Comissão de Orçamento", horario: "Após a Sessão Extraordinária" }
+      ],
+      "2026-01-16": [
+        { tipo: "comissao", titulo: "Reunião Extraordinária da Comissão de Constituição", horario: "12:30" }
+      ],
+      "2026-01-19": [
+        { tipo: "sessao", titulo: "Sessão Extraordinária", horario: "18:00" }
+      ],
+      "2026-03-20": [
+        { tipo: "feriado", titulo: "Feriado Municipal: Aniversário de Coronel Barros", horario: "Dia todo" },
+        { tipo: "sessao", titulo: "Sessão Solene Comemorativa", horario: "17:30" }
+      ],
+      "2026-09-07": [
+        { tipo: "feriado", titulo: "Feriado Nacional: Independência do Brasil", horario: "Dia todo", obs: "A reunião de comissões desta semana foi transferida para terça-feira, 08/09." }
+      ],
+      "2026-09-08": [
+        { tipo: "comissao", titulo: "Reunião das Comissões Permanentes (Transferida)", horario: "17:35", obs: "Reunião transferida da segunda-feira (07/09 - Feriado da Independência) para a terça-feira, conforme Regimento Interno." }
+      ],
+      "2026-10-12": [
+        { tipo: "feriado", titulo: "Feriado Nacional: Nossa Senhora Aparecida (Padroeira do Brasil)", horario: "Dia todo", obs: "A Sessão Ordinária desta quinzena foi transferida para terça-feira, 13/10." }
+      ],
+      "2026-10-13": [
+        { tipo: "sessao", titulo: "Sessão Ordinária (Transferida)", horario: "18:00", obs: "Sessão transferida da segunda-feira (12/10 - Feriado Nacional) para a terça-feira, conforme Art. 10 da Lei Orgânica." }
+      ],
+      "2026-11-02": [
+        { tipo: "feriado", titulo: "Feriado Nacional: Finados", horario: "Dia todo", obs: "A reunião de comissões desta semana foi transferida para terça-feira, 03/11." }
+      ],
+      "2026-11-03": [
+        { tipo: "comissao", titulo: "Reunião das Comissões Permanentes (Transferida)", horario: "17:35", obs: "Reunião transferida da segunda-feira (02/11 - Feriado de Finados) para a terça-feira, conforme Regimento Interno." }
+      ]
+    };
 
-function isLeapYear(year) {
-  return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
-}
-
-function showMonth(mes) {
-  const cal = document.getElementById('calendar');
-  const now = new Date();
-  const currentYear = 2026;
-  const todayDay = now.getDate();
-  const todayMonth = now.getMonth();
-  const todayYear = now.getFullYear();
-
-  if (isLeapYear(currentYear)) {
-    diasMes[1] = 29;
-  } else {
-    diasMes[1] = 28;
-  }
-
-  let html = `<h3 style="text-align:center; margin:15px 0; font-size:1.3rem;">${meses[mes]} ${currentYear}</h3>`;
-  html += '<table><tr>';
-  ['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'].forEach(d => html += `<th>${d}</th>`);
-  html += '</tr>';
-
-  const firstDay = new Date(currentYear, mes, 1).getDay();
-  let weekday = (firstDay === 0) ? 6 : firstDay - 1;
-  let day = 1;
-
-  while (day <= diasMes[mes]) {
-    if (weekday === 0) html += '<tr>';
-
-    if (day === 1 && weekday > 0) {
-      for (let i = 0; i < weekday; i++) html += '<td></td>';
+    function isRecesso(dateStr) {
+      const date = new Date(dateStr + "T00:00:00");
+      // Recesso Constitucional de Verão: 16 de janeiro a 28 de fevereiro
+      const start1 = new Date("2026-01-16T00:00:00");
+      const end1 = new Date("2026-02-28T00:00:00");
+      // Recesso de Inverno: primeira quinzena de julho se previsto, ou recesso padrão
+      return date >= start1 && date <= end1;
     }
 
-    const dateStr = `${currentYear}-${String(mes+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-    let className = 'day';
-    let title = '';
+    /* ==========================================================
+       AUTO-RESIZE E COMUNICAÇÃO DE EMBED (Sem scrollbar no Plone)
+       ========================================================== */
+    function checkEmbedMode() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const isEmbed = urlParams.get('embed') === '1' || urlParams.get('embed') === 'true' || window.self !== window.top;
+      const isHideHeader = urlParams.get('hide_header') === '1' || urlParams.get('hide_header') === 'true';
 
-    if (day === todayDay && mes === todayMonth && todayYear === currentYear) {
-      className += ' today';
+      if (isEmbed) {
+        document.body.classList.add('is-embedded');
+      }
+      if (isHideHeader) {
+        document.body.classList.add('hide-header');
+      }
     }
 
-    if (eventosExtras[dateStr]) {
-      const temSessao = eventosExtras[dateStr].some(e => e.tipo === 'sessao');
-      const temComissao = eventosExtras[dateStr].some(e => e.tipo === 'comissao');
-      const temFeriado = eventosExtras[dateStr].some(e => e.tipo === 'feriado');
-      const temPonto = eventosExtras[dateStr].some(e => e.tipo === 'ponto-facultativo');
-      if (temSessao) className += ' sessao';
-      else if (temComissao) className += ' comissao';
-      else if (temFeriado) className += ' feriado';
-      else if (temPonto) className += ' ponto-facultativo';
-      title = eventosExtras[dateStr].map(e => e.titulo).join(' / ');
-    } else if (sessoes.includes(dateStr)) {
-      className += ' sessao';
-      title = 'Sessão Ordinária – 18h';
-    } else if (comissoes.includes(dateStr)) {
-      className += ' comissao';
-      title = 'Reuniões de Comissões – 17:35';
-    } else if (isRecesso(dateStr)) {
-      className += ' recesso';
-      title = 'Recesso Parlamentar';
+    function notifyParentResize() {
+      if (window.self !== window.top) {
+        const height = Math.max(
+          document.body.scrollHeight,
+          document.documentElement.scrollHeight,
+          document.body.offsetHeight,
+          document.documentElement.offsetHeight
+        );
+        window.parent.postMessage({ type: 'sapl-resize', height: height }, '*');
+      }
     }
 
-    html += `<td class="${className}" data-date="${dateStr}" onclick="showEvents('${dateStr}', ${day}, '${meses[mes]}')" title="${title}">${day}</td>`;
+    if (window.ResizeObserver) {
+      try {
+        const ro = new ResizeObserver(() => notifyParentResize());
+        ro.observe(document.body);
+      } catch (e) {}
+    }
 
-    day++;
-    weekday = (weekday + 1) % 7;
+    /* ==========================================================
+       CONSTRUÇÃO DA INTERFACE DO CALENDÁRIO
+       ========================================================== */
+    function initMonthButtons() {
+      const container = document.getElementById('monthButtonsContainer');
+      container.innerHTML = mesesAbrev.map((m, idx) => `
+        <button type="button" class="month-btn ${idx === selectedMonth ? 'active' : ''}" onclick="selectMonth(${idx})">
+          ${m}
+        </button>
+      `).join('');
+    }
 
-    if (weekday === 0 || day > diasMes[mes]) html += '</tr>';
-  }
+    function selectMonth(mesIdx) {
+      selectedMonth = mesIdx;
+      document.querySelectorAll('.month-btn').forEach((btn, idx) => {
+        btn.classList.toggle('active', idx === selectedMonth);
+      });
+      renderCalendar(selectedMonth);
+    }
 
-  html += '</table>';
-  cal.innerHTML = html;
+    function getEventsForDate(dateStr) {
+      if (eventosExtras[dateStr]) {
+        return eventosExtras[dateStr];
+      }
+      const list = [];
+      if (feriados2026[dateStr]) {
+        list.push({
+          tipo: feriados2026[dateStr].tipo,
+          titulo: feriados2026[dateStr].titulo,
+          horario: "Dia todo"
+        });
+      }
+      if (sessoes2026.includes(dateStr)) {
+        list.push({
+          tipo: "sessao",
+          titulo: "Sessão Plenária Ordinária",
+          horario: "18:00"
+        });
+      }
+      if (comissoes2026.includes(dateStr)) {
+        list.push({
+          tipo: "comissao",
+          titulo: "Reuniões das Comissões Permanentes",
+          horario: "17:35",
+          descricao: "Comissão de Constituição e Justiça / Comissão de Orçamento e Finanças"
+        });
+      }
+      if (list.length === 0 && isRecesso(dateStr)) {
+        list.push({
+          tipo: "recesso",
+          titulo: "Recesso Parlamentar",
+          horario: "Período sem sessões ordinárias"
+        });
+      }
+      return list;
+    }
 
-  document.querySelectorAll('.month-buttons button').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.month-buttons button')[mes].classList.add('active');
-}
+    function renderCalendar(mesIdx) {
+      document.getElementById('monthDisplayTitle').textContent = `${meses[mesIdx]} ${currentYear}`;
+      
+      const tbody = document.getElementById('calendarBody');
+      tbody.innerHTML = '';
 
-function showEvents(date, day, month) {
-  const events = document.getElementById('events');
-  let text = `<strong>${day} de ${month} de 2026</strong><br><br>`;
+      const now = new Date();
+      const todayYear = now.getFullYear();
+      const todayMonth = now.getMonth();
+      const todayDay = now.getDate();
 
-  if (eventosExtras[date]) {
-    eventosExtras[date].forEach(e => {
-      text += `<strong>● ${e.titulo}</strong><br>Horário: ${e.horario}<br><br>`;
+      const daysInMonth = new Date(currentYear, mesIdx + 1, 0).getDate();
+      const firstDayDate = new Date(currentYear, mesIdx, 1);
+      // getDay: 0 = Dom, 1 = Seg ... 6 = Sab
+      // Queremos que Seg seja 0 e Dom seja 6
+      let startWeekday = firstDayDate.getDay();
+      startWeekday = (startWeekday === 0) ? 6 : startWeekday - 1;
+
+      let currentDay = 1;
+      let rowsHtml = '';
+      let monthHasSelectedDay = false;
+
+      while (currentDay <= daysInMonth) {
+        rowsHtml += '<tr>';
+        
+        for (let col = 0; col < 7; col++) {
+          if ((currentDay === 1 && col < startWeekday) || currentDay > daysInMonth) {
+            rowsHtml += '<td class="empty-cell"></td>';
+          } else {
+            const dateStr = `${currentYear}-${String(mesIdx + 1).padStart(2, '0')}-${String(currentDay).padStart(2, '0')}`;
+            const events = getEventsForDate(dateStr);
+            
+            const isToday = (todayYear === currentYear && todayMonth === mesIdx && todayDay === currentDay);
+            const isSelected = (selectedDate === dateStr);
+            if (isSelected) monthHasSelectedDay = true;
+
+            const temSessao = events.some(e => e.tipo === 'sessao');
+            const temComissao = events.some(e => e.tipo === 'comissao');
+            const temFeriado = events.some(e => e.tipo === 'feriado');
+            const temPonto = events.some(e => e.tipo === 'ponto-facultativo');
+            const temRecesso = events.some(e => e.tipo === 'recesso');
+
+            let classList = [];
+            if (temSessao) classList.push('is-sessao');
+            if (temComissao) classList.push('is-comissao');
+            if (temFeriado) classList.push('is-feriado');
+            if (temPonto) classList.push('is-ponto');
+            if (temRecesso) classList.push('is-recesso');
+            if (isToday) classList.push('is-today');
+            if (isSelected) classList.push('is-selected');
+
+            // Gera minipills para o dia
+            let pillsHtml = '';
+            events.slice(0, 2).forEach(e => {
+              let label = '';
+              if (e.tipo === 'sessao') label = 'Sessão 18h';
+              else if (e.tipo === 'comissao') label = 'Comissão 17h35';
+              else if (e.tipo === 'feriado') label = 'Feriado';
+              else if (e.tipo === 'ponto-facultativo') label = 'Ponto Fac.';
+              else if (e.tipo === 'recesso') label = 'Recesso';
+              
+              pillsHtml += `<span class="day-pill">${label}</span>`;
+            });
+            if (events.length > 2) {
+              pillsHtml += `<span class="day-pill">+${events.length - 2} mais</span>`;
+            }
+
+            rowsHtml += `
+              <td class="${classList.join(' ')}" data-date="${dateStr}" onclick="handleDayClick('${dateStr}', ${currentDay}, ${mesIdx})">
+                <span class="day-num">${currentDay}</span>
+                ${isToday ? '<span class="today-tag">HOJE</span>' : ''}
+                <div class="day-badges">${pillsHtml}</div>
+              </td>
+            `;
+
+            currentDay++;
+          }
+        }
+        rowsHtml += '</tr>';
+      }
+
+      tbody.innerHTML = rowsHtml;
+      renderMonthUpcoming(mesIdx);
+
+      // Se nenhum dia deste mês estava selecionado, seleciona o primeiro dia com evento ou dia 1
+      if (!monthHasSelectedDay) {
+        // Tenta achar o primeiro dia com sessão ou evento
+        let targetDay = 1;
+        for (let d = 1; d <= daysInMonth; d++) {
+          const ds = `${currentYear}-${String(mesIdx + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+          if (getEventsForDate(ds).length > 0) {
+            targetDay = d;
+            break;
+          }
+        }
+        const initialDateStr = `${currentYear}-${String(mesIdx + 1).padStart(2, '0')}-${String(targetDay).padStart(2, '0')}`;
+        handleDayClick(initialDateStr, targetDay, mesIdx);
+      }
+
+      notifyParentResize();
+    }
+
+    function handleDayClick(dateStr, day, mesIdx) {
+      selectedDate = dateStr;
+
+      // Atualiza bordas selecionadas
+      document.querySelectorAll('#calendarBody td').forEach(td => {
+        td.classList.toggle('is-selected', td.getAttribute('data-date') === dateStr);
+      });
+
+      renderDetails(dateStr, day, mesIdx);
+      notifyParentResize();
+    }
+
+    function renderDetails(dateStr, day, mesIdx) {
+      const dt = new Date(dateStr + "T00:00:00");
+      let wIdx = dt.getDay(); // 0 Dom, 1 Seg
+      wIdx = (wIdx === 0) ? 6 : wIdx - 1;
+      const weekdayName = diasSemanaNomes[wIdx];
+
+      document.getElementById('selectedDateText').textContent = `${day} de ${meses[mesIdx]} de ${currentYear}`;
+      document.getElementById('selectedWeekdayText').textContent = weekdayName;
+
+      const events = getEventsForDate(dateStr);
+      const container = document.getElementById('eventsList');
+
+      if (!events || events.length === 0) {
+        container.innerHTML = `
+          <div class="empty-events">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="8" y1="12" x2="16" y2="12"></line>
+            </svg>
+            <p>Nenhuma sessão ou evento legislativo oficial agendado para este dia.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = events.map(e => {
+        let entryClass = `event-${e.tipo}`;
+        let iconSvg = '';
+        if (e.tipo === 'sessao') {
+          iconSvg = '🏛️';
+        } else if (e.tipo === 'comissao') {
+          iconSvg = '👥';
+        } else if (e.tipo === 'feriado') {
+          iconSvg = '🔴';
+        } else if (e.tipo === 'ponto-facultativo') {
+          iconSvg = '🟣';
+        } else {
+          iconSvg = '📋';
+        }
+
+        let alertBoxHtml = '';
+        if (e.obs) {
+          alertBoxHtml = `
+            <div class="event-alert-box">
+              <span>⚠️</span>
+              <span>${e.obs}</span>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="event-entry ${entryClass}">
+            <div class="event-title">
+              <span>${iconSvg}</span>
+              <span>${e.titulo}</span>
+            </div>
+            <div class="event-time">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>Horário: <strong>${e.horario}</strong></span>
+            </div>
+            ${e.descricao ? `<div style="font-size:0.8rem; color: var(--text-muted); margin-top: 4px;">${e.descricao}</div>` : ''}
+            ${alertBoxHtml}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderMonthUpcoming(mesIdx) {
+      const container = document.getElementById('monthUpcomingList');
+      const daysInMonth = new Date(currentYear, mesIdx + 1, 0).getDate();
+      const monthEvents = [];
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const ds = `${currentYear}-${String(mesIdx + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const evs = getEventsForDate(ds);
+        evs.forEach(e => {
+          if (e.tipo === 'sessao' || e.tipo === 'comissao' || e.tipo === 'feriado') {
+            monthEvents.push({ dateStr: ds, day: d, ...e });
+          }
+        });
+      }
+
+      if (monthEvents.length === 0) {
+        container.innerHTML = '<p style="font-size:0.82rem; color:var(--text-muted);">Sem sessões previstas para este mês (Recesso).</p>';
+        return;
+      }
+
+      container.innerHTML = monthEvents.slice(0, 5).map(m => `
+        <div class="upcoming-item" onclick="handleDayClick('${m.dateStr}', ${m.day}, ${mesIdx})" title="Clique para ver detalhes do dia ${m.day}">
+          <div>
+            <span class="upcoming-day">${m.day}/${String(mesIdx + 1).padStart(2, '0')}</span> - ${m.titulo}
+          </div>
+          <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">${m.horario}</span>
+        </div>
+      `).join('');
+    }
+
+    /* Navegação Anterior / Próximo Mês */
+    document.getElementById('btnPrevMonth').addEventListener('click', () => {
+      let prev = selectedMonth - 1;
+      if (prev < 0) prev = 11;
+      selectMonth(prev);
     });
-  } else if (sessoes.includes(date)) {
-    text += '<strong>● Sessão Ordinária</strong><br>Horário: 18:00';
-  } else if (comissoes.includes(date)) {
-    text += '<strong>● Reunião da Comissão de Constituição, Justiça, Cidadania e Desenvolvimento Social</strong><br>Horário: 17:35<br><br>';
-    text += '<strong>● Reunião da Comissão de Orçamento, Finanças, Tributos e Infraestrutura Urbana e Rural</strong><br>Horário: 17:35';
-  } else if (isRecesso(date)) {
-    text += '<strong>● Recesso Parlamentar</strong>';
-  } else {
-    text += 'Nenhum evento agendado para este dia.';
-  }
 
-  events.innerHTML = text;
-  document.querySelectorAll('.day.selected').forEach(d => d.classList.remove('selected'));
-  document.querySelectorAll(`.day[data-date="${date}"]`).forEach(cell => cell.classList.add('selected'));
-}
+    document.getElementById('btnNextMonth').addEventListener('click', () => {
+      let next = selectedMonth + 1;
+      if (next > 11) next = 0;
+      selectMonth(next);
+    });
 
-window.onload = () => {
-  const now = new Date();
-  const currentMonth = now.getMonth();
-  const currentDay = now.getDate();
-  const currentYear = now.getFullYear();
-  
-  showMonth(currentMonth);
-  
-  if (currentYear === 2026) {
-    const dateStr = `2026-${String(currentMonth+1).padStart(2,'0')}-${String(currentDay).padStart(2,'0')}`;
-    showEvents(dateStr, currentDay, meses[currentMonth]);
-  }
-};
-</script>
+    /* ==========================================================
+       INICIALIZAÇÃO
+       ========================================================== */
+    checkEmbedMode();
+    initMonthButtons();
 
+    // Inicia no mês corrente se for 2026, ou março
+    const now = new Date();
+    if (now.getFullYear() === currentYear) {
+      selectedMonth = now.getMonth();
+    } else {
+      selectedMonth = 2; // Março
+    }
+
+    selectMonth(selectedMonth);
+  </script>
 </body>
 </html>
