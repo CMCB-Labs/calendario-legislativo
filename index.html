@@ -113,7 +113,9 @@
       height: auto !important;
       margin: 0 !important;
       padding: 0 !important;
-      overflow: hidden !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch !important;
     }
     html.is-embedded .app-container,
     body.is-embedded .app-container {
@@ -1043,6 +1045,14 @@
 
       renderDetails(dateStr, day, mesIdx);
       notifyParentResize();
+
+      // No celular/tablet, rola suavemente até o cartão de detalhes do dia
+      if (window.innerWidth <= 900) {
+        const detailsEl = document.querySelector('.details-card');
+        if (detailsEl) {
+          detailsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
     }
 
     function renderDetails(dateStr, day, mesIdx) {
