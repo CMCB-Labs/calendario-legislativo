@@ -852,6 +852,10 @@
     function notifyParentResize() {
       if (window.self === window.top) return;
 
+      const urlParams = new URLSearchParams(window.location.search);
+      const allowResize = urlParams.get('auto_resize') === '1' || window.name === 'windowZ';
+      if (!allowResize) return;
+
       if (resizeTimer) clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         const container = document.getElementById('appContainer');
