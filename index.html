@@ -17,55 +17,56 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --primary: #5c854b;
-      --primary-dark: #325a1e;
-      --primary-light: #729e60;
-      --accent: #3ebb51;
-      --accent-hover: #319e42;
-      --accent-soft: #eef6ec;
-      --text-main: #21301d;
-      --text-muted: #576b51;
-      --text-light: #8da187;
-      --bg: #f5f7f4;
+      /* Identidade Visual Oficial - Câmara Municipal de Coronel Barros */
+      --primary: #006838;
+      --primary-dark: #004d2a;
+      --primary-light: #008447;
+      --accent: #ffcc00;
+      --accent-hover: #e6b800;
+      --accent-soft: #fffdf0;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --bg: #f8fafc;
       --surface: #ffffff;
-      --border: #dbe4d8;
-      --border-focus: #5c854b;
+      --border: #e2e8f0;
+      --border-focus: #006838;
       
-      /* Cores de Eventos */
-      --sessao-bg: #fff8e1;
-      --sessao-border: #fbc02d;
-      --sessao-text: #7f6000;
-      --sessao-dot: #f57f17;
+      /* Cores Harmonizadas de Eventos */
+      --sessao-bg: #edf7ed;
+      --sessao-border: #006838;
+      --sessao-text: #004d2a;
+      --sessao-dot: #006838;
 
-      --comissao-bg: #e0f2f1;
-      --comissao-border: #4db6ac;
-      --comissao-text: #004d40;
-      --comissao-dot: #00897b;
+      --comissao-bg: #f0f9ff;
+      --comissao-border: #0284c7;
+      --comissao-text: #0369a1;
+      --comissao-dot: #0284c7;
 
-      --feriado-bg: #ffebee;
-      --feriado-border: #e57373;
-      --feriado-text: #b71c1c;
-      --feriado-dot: #d32f2f;
+      --feriado-bg: #fef2f2;
+      --feriado-border: #ef4444;
+      --feriado-text: #991b1b;
+      --feriado-dot: #dc2626;
 
-      --ponto-bg: #f3e5f5;
-      --ponto-border: #ba68c8;
-      --ponto-text: #4a148c;
-      --ponto-dot: #8e24aa;
+      --ponto-bg: #fffbeb;
+      --ponto-border: #f59e0b;
+      --ponto-text: #92400e;
+      --ponto-dot: #d97706;
 
-      --recesso-bg: #f5f5f5;
-      --recesso-border: #cfd8dc;
-      --recesso-text: #546e7a;
+      --recesso-bg: #f1f5f9;
+      --recesso-border: #cbd5e1;
+      --recesso-text: #475569;
 
       --radius-sm: 8px;
       --radius-md: 12px;
-      --radius-lg: 18px;
+      --radius-lg: 16px;
       --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 4px 10px rgba(40, 70, 30, 0.08);
-      --shadow-lg: 0 10px 25px rgba(40, 70, 30, 0.12);
+      --shadow-md: 0 4px 15px rgba(0, 104, 56, 0.08);
+      --shadow-lg: 0 10px 25px rgba(0, 104, 56, 0.12);
       --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -82,7 +83,7 @@
     }
 
     body {
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background-color: var(--bg);
       color: var(--text-main);
       line-height: 1.5;
@@ -138,7 +139,7 @@
 
     /* Header Principal */
     .main-header {
-      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 65%, var(--primary-light) 100%);
+      background: linear-gradient(135deg, #004d2a 0%, #006838 70%, #008447 100%);
       color: #ffffff;
       padding: 1.75rem 1.5rem 1.5rem;
       border-radius: 0 0 var(--radius-lg) var(--radius-lg);
@@ -207,7 +208,7 @@
       cursor: pointer;
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
-      background: #f7faf6;
+      background: #f8fafc;
       color: var(--text-main);
       transition: var(--transition);
       text-align: center;
@@ -221,7 +222,7 @@
       background: var(--primary);
       color: #ffffff;
       border-color: var(--primary-dark);
-      box-shadow: 0 2px 6px rgba(92, 133, 75, 0.35);
+      box-shadow: 0 3px 8px rgba(0, 104, 56, 0.28);
       font-weight: 700;
     }
 
@@ -359,9 +360,9 @@
       border-color: var(--sessao-border) !important;
     }
     td.is-sessao .day-pill {
-      background: #fff0b3;
-      color: var(--sessao-text);
-      border: 1px solid rgba(251, 192, 45, 0.4);
+      background: #006838;
+      color: #ffffff;
+      border: 1px solid #004d2a;
     }
 
     td.is-comissao {
@@ -369,9 +370,9 @@
       border-color: var(--comissao-border) !important;
     }
     td.is-comissao .day-pill {
-      background: #b2dfdb;
-      color: var(--comissao-text);
-      border: 1px solid rgba(77, 182, 172, 0.4);
+      background: #0284c7;
+      color: #ffffff;
+      border: 1px solid #0369a1;
     }
 
     td.is-feriado {
@@ -379,9 +380,9 @@
       border-color: var(--feriado-border) !important;
     }
     td.is-feriado .day-pill {
-      background: #ffcdd2;
-      color: var(--feriado-text);
-      border: 1px solid rgba(229, 115, 115, 0.4);
+      background: #ef4444;
+      color: #ffffff;
+      border: 1px solid #dc2626;
     }
 
     td.is-ponto {
@@ -389,9 +390,9 @@
       border-color: var(--ponto-border) !important;
     }
     td.is-ponto .day-pill {
-      background: #e1bee7;
-      color: var(--ponto-text);
-      border: 1px solid rgba(186, 104, 200, 0.4);
+      background: #f59e0b;
+      color: #ffffff;
+      border: 1px solid #d97706;
     }
 
     td.is-recesso {
@@ -417,18 +418,20 @@
       position: absolute;
       top: 3px;
       right: 3px;
-      background: var(--primary-dark);
-      color: #ffffff;
-      font-size: 0.55rem;
+      background: #ffcc00;
+      color: #004d2a;
+      font-size: 0.58rem;
       font-weight: 800;
       padding: 1px 4px;
-      border-radius: 3px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+      letter-spacing: 0.02em;
     }
 
     /* Destaque para Dia Selecionado */
     td.is-selected {
-      box-shadow: 0 0 0 3px #ff9800, 0 4px 10px rgba(255, 152, 0, 0.25) !important;
-      border-color: #f57c00 !important;
+      box-shadow: 0 0 0 3px #006838, 0 4px 12px rgba(0, 104, 56, 0.25) !important;
+      border-color: #006838 !important;
       z-index: 5;
     }
 
@@ -1007,7 +1010,7 @@
             }
 
             rowsHtml += `
-              <td class="${classList.join(' ')}" data-date="${dateStr}" onclick="handleDayClick('${dateStr}', ${currentDay}, ${mesIdx})">
+              <td class="${classList.join(' ')}" data-date="${dateStr}" onclick="handleDayClick('${dateStr}', ${currentDay}, ${mesIdx}, true)">
                 <span class="day-num">${currentDay}</span>
                 ${isToday ? '<span class="today-tag">HOJE</span>' : ''}
                 <div class="day-badges">${pillsHtml}</div>
@@ -1027,15 +1030,15 @@
       // REGRA: se estivermos no mês de HOJE, seleciona exatamente HOJE!
       if (todayYear === currentYear && todayMonth === mesIdx) {
         const todayDateStr = `${currentYear}-${String(mesIdx + 1).padStart(2, '0')}-${String(todayDay).padStart(2, '0')}`;
-        handleDayClick(todayDateStr, todayDay, mesIdx);
+        handleDayClick(todayDateStr, todayDay, mesIdx, false);
       } else {
         // Se for outro mês navegado, seleciona o dia 1
         const dayOneStr = `${currentYear}-${String(mesIdx + 1).padStart(2, '0')}-01`;
-        handleDayClick(dayOneStr, 1, mesIdx);
+        handleDayClick(dayOneStr, 1, mesIdx, false);
       }
     }
 
-    function handleDayClick(dateStr, day, mesIdx) {
+    function handleDayClick(dateStr, day, mesIdx, isUserClick = false) {
       selectedDate = dateStr;
 
       // Atualiza bordas selecionadas
@@ -1046,8 +1049,8 @@
       renderDetails(dateStr, day, mesIdx);
       notifyParentResize();
 
-      // No celular/tablet, rola suavemente até o cartão de detalhes do dia
-      if (window.innerWidth <= 900) {
+      // Rola apenas se foi um clique MANUAL do usuário E se NÃO estiver embutido como iframe
+      if (isUserClick && window.innerWidth <= 900 && window.self === window.top) {
         const detailsEl = document.querySelector('.details-card');
         if (detailsEl) {
           detailsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
