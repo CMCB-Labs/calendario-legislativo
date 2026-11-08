@@ -857,18 +857,14 @@
     function notifyParentResize() {
       if (window.self === window.top) return;
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const allowResize = urlParams.get('auto_resize') === '1' || window.name === 'windowZ';
-      if (!allowResize) return;
-
       if (resizeTimer) clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
-        const container = document.getElementById('appContainer');
+        const container = document.getElementById('appContainer') || document.body;
         if (!container) return;
 
         // Mede a altura estrita do container visual
         const rect = container.getBoundingClientRect();
-        const exactHeight = Math.ceil(rect.height) + 6;
+        const exactHeight = Math.ceil(rect.height) + 12;
 
         // Só envia mensagem se a altura tiver realmente mudado mais de 3px
         if (Math.abs(lastSentHeight - exactHeight) >= 3) {
